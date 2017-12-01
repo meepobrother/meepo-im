@@ -13,7 +13,7 @@ export class MemberService {
     }
 
     async getMyFriend(): Promise<Member[]> {
-        return await this.repository.find();
+        return await this.repository.find({ where: { uniacid: 15 }, take: 5 });
     }
 
     async getInfoByMobile(mobile: string): Promise<Member> {

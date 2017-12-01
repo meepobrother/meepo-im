@@ -11,9 +11,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
-import { layimConfig } from '../_mock/layimConfig';
 import { MemberService } from '../shared/member/member.service';
-import { MessageService } from '../shared/message/message.service';
 import * as uuid from 'uuid';
 
 let clients = {};
@@ -21,55 +19,19 @@ let clients = {};
 @WebSocketGateway(8001)
 export class EventsGateway {
     constructor(
-        public member: MemberService,
-        public message: MessageService
+        public member: MemberService
     ) { }
 
     @WebSocketServer() server;
-
     @SubscribeMessage('im.init')
-    async onInit(client, data): Promise<any> {
+    onInit(client, openid) {
         const event = 'im.init.success';
-        const myinfo = await this.member.getInfoByOpenid(data);
-        if (myinfo) {
-            myinfo.avatar = './images/face/' + myinfo.avatar + '.gif';
-        }
-        clients[data] = client;
-        const friend = await this.member.getMyFriend();
-        friend.map(res => {
-            res.avatar = './images/face/' + res.avatar + '.gif';
-        });
-        return {
-            event: event,
-            data: {
-                title: '米波在线聊天插件',
-                chatTitleColor: "#36373C",
-                isAudio: true,
-                isVideo: true,
-                notice: true,
-                copyright: '米波网络科技',
-                uploadImage: {
-                    url: '/upload/image',
-                    type: ''
-                },
-                uploadFile: {
-                    url: '/upload/file',
-                    type: ''
-                },
-                // brief: true,
-                init: {
-                    mine: myinfo,
-                    friend: [{
-                        groupname: '我的朋友',
-                        list: friend
-                    }],
-                    group: []
-                },
-                tool: [],
-                moreList: [],
-                isgroup: true
-            }
+        clients[openid] = client;
+        let data = {
+            title: "米波在线聊天工具"
         };
+        client.emit(event, data);
+        // return { event, data: data };
     }
 
     @SubscribeMessage('message.send')
@@ -88,6 +50,11 @@ export class EventsGateway {
             fromid: mine.id,
             timestamp: new Date().getTime()
         };
-        clients[to.id].emit(event2, im);
+        clients[to['openid']].emit(event2, im);
+    }
+
+    @SubscribeMessage('disconnect')
+    onDisconnected() {
+        console.log('disconnect');
     }
 }

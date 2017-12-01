@@ -22,4 +22,7 @@ export class Member {
     
     @Column()
     status: string;
+
+    @Column()
+    uniacid: number;
 }
