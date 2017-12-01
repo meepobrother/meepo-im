@@ -16,16 +16,21 @@
         "@nestjs/testing": "^4.4.0",
         "@nestjs/websockets": "^4.4.0",
         "jsonwebtoken": "^8.1.0",
+        "mysql": "^2.15.0",
         "passport": "^0.4.0",
         "passport-jwt": "^3.0.1",
         "redis": "^2.7.1",
         "reflect-metadata": "^0.1.10",
         "rxjs": "^5.4.0",
-        "typescript": "^2.5.2"
+        "socket.io": "^2.0.4",
+        "typeorm": "^0.1.6",
+        "typescript": "^2.5.2",
+        "uuid": "^3.1.0"
     },
     "devDependencies": {
         "@types/node": "^8.0.28",
         "@types/passport-jwt": "^3.0.0",
+        "@types/socket.io": "^1.4.31",
         "nodemon": "^1.12.1",
         "ts-node": "^3.3.0"
     }

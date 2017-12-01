@@ -1,7 +1,14 @@
 import { Module } from '@nestjs/common';
 import { EventsGateway } from './events.gateway';
 
+import { SharedModule } from '../shared/shared.module';
+
 @Module({
-    components: [EventsGateway],
+    modules: [
+        SharedModule
+    ],
+    components: [
+        EventsGateway
+    ],
 })
-export class EventsModule {}
+export class EventsModule { }
