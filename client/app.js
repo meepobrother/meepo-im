@@ -6,36 +6,26 @@ layui.config({
         layer = mobile.layer,
         autoReplay = [],
         layimConfig = {};
+    const socket = io('https://meepo.com.cn');
     socket.on('im.init.success', function(data) {
-        if (data) {
-            console.log(data);
-            layim.config(data);
-        }
+        layim.config(data);
     });
-    //监听自定义工具栏点击，以添加代码为例
-    layim.on('tool(code)', function(insert, send) {
-        insert('[pre class=layui-code]123[/pre]'); //将内容插入到编辑器
-        send();
-    });
-    //监听发送消息
     layim.on('sendMessage', function(data) {
-        console.log('sendMessage', data);
         socket.emit('message.send', data);
     });
+    socket.on('connect', function() {
+        socket.emit('im.init', openid);
+    });
+    socket.on('disconnect', function() {
+        socket.emit('disconnect', openid);
+    });
+    // 上线
+    socket.on('member.online', function(data) {
+        console.log('member.online', data);
+    });
+    // 接收消息
     socket.on('message.recive', function(msg) {
-        console.log('message.recive', msg);
         layim.getMessage(msg);
     });
-
-});
-
-const socket = io('http://localhost:8001');
-socket.on('connect', function() {
-    socket.emit('im.init', openid);
-});
-socket.on('disconnect', function() {
-    console.log('Disconnected');
-});
-socket.on('member.online', function(data) {
-    console.log('member.online', data);
+    socket.on();
 });

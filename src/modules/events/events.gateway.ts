@@ -14,7 +14,8 @@ import 'rxjs/add/operator/map';
 import { MemberService } from '../shared/member/member.service';
 import * as uuid from 'uuid';
 
-let clients = {};
+var clients = {};
+var users = {};
 
 @WebSocketGateway(8001)
 export class EventsGateway {
@@ -23,15 +24,13 @@ export class EventsGateway {
     ) { }
 
     @WebSocketServer() server;
+
     @SubscribeMessage('im.init')
-    onInit(client, openid) {
-        const event = 'im.init.success';
-        clients[openid] = client;
-        let data = {
-            title: "米波在线聊天工具"
-        };
-        client.emit(event, data);
-        // return { event, data: data };
+    onInit(client, user) {
+        clients[user.openid] = client;
+        users[user.openid] = user;
+        console.log(users);
+        client.emit('im.init.success', users);
     }
 
     @SubscribeMessage('message.send')
@@ -52,9 +51,10 @@ export class EventsGateway {
         };
         clients[to['openid']].emit(event2, im);
     }
-
+    // 下线通知
     @SubscribeMessage('disconnect')
-    onDisconnected() {
-        console.log('disconnect');
+    onDisconnected(client, openid) {
+        clients[openid] = null;
+        client.broadcast.emit('disconnect', users[openid]);
     }
 }

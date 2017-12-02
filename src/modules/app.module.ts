@@ -8,9 +8,9 @@ import { EventsModule } from './events/events.module';
     EventsModule,
     SharedModule
   ],
-  controllers: [
+  controllers: [],
+  components: [
     AppController
   ],
-  components: [],
 })
 export class ApplicationModule {}
