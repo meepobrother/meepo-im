@@ -7,8 +7,32 @@
     <meta name="format-detection" content="telephone=no">
     <title>MeepoIM 移动版</title>
     <link rel="stylesheet" href="./css/layui.mobile.css">
+    <style>
+        .layui-layim-tab li {
+            width: 50% !important;
+        }
+
+        [lay-type="more"] {
+            display: none;
+            visibility: hidden;
+        }
+    </style>
     <script>
         var openid = 'fromUser2';
+        var user = {
+            avatar: 'https://meepo.com.cn/addons/imeepos_runnner/icon.jpg',
+            nickname: 'test2',
+            openid: openid
+        }
+
+        var config = {
+            title: '米波IM聊天',
+            isgroup: 0,
+            isNewFriend: 0,
+            voice: '',
+            chatTitleColor: '#3FDD86',
+            moreList: []
+        }
     </script>
 </head>
 

@@ -5,19 +5,21 @@ layui.config({
         layim = mobile.layim,
         layer = mobile.layer,
         autoReplay = [],
-        layimConfig = {};
-    const socket = io('https://meepo.com.cn');
+        layimConfig = config;
+    const socket = io('http://localhost:8001');
+    layim.config(layimConfig);
     socket.on('im.init.success', function(data) {
-        layim.config(data);
+        layim.config(data); 
+        localStorage.imConfig=JSON.stringify(data);
     });
     layim.on('sendMessage', function(data) {
         socket.emit('message.send', data);
     });
     socket.on('connect', function() {
-        socket.emit('im.init', openid);
+        socket.emit('im.init', user);
     });
     socket.on('disconnect', function() {
-        socket.emit('disconnect', openid);
+        socket.emit('disconnect', user);
     });
     // 上线
     socket.on('member.online', function(data) {
@@ -27,5 +29,4 @@ layui.config({
     socket.on('message.recive', function(msg) {
         layim.getMessage(msg);
     });
-    socket.on();
 });

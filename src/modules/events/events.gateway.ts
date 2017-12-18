@@ -11,7 +11,6 @@ import {
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/from';
 import 'rxjs/add/operator/map';
-import { MemberService } from '../shared/member/member.service';
 import * as uuid from 'uuid';
 
 var clients = {};
@@ -20,7 +19,6 @@ var users = {};
 @WebSocketGateway(8001)
 export class EventsGateway {
     constructor(
-        public member: MemberService
     ) { }
 
     @WebSocketServer() server;
@@ -29,7 +27,6 @@ export class EventsGateway {
     onInit(client, user) {
         clients[user.openid] = client;
         users[user.openid] = user;
-        console.log(users);
         client.emit('im.init.success', users);
     }
 
